@@ -1,0 +1,35 @@
+---
+import type { Albums } from "../types/dataMusic";
+import { Image } from "astro:assets";
+
+interface Props {
+    album: Albums;
+}
+
+const { album }: Props = Astro.props;
+const { id, title, cover } = album;
+---
+
+<a href={`/albums/${id}`} class="block mt-4 pl-4">
+    <div class="relative">
+        <picture class="flex relative items-center">
+            <Image
+                src={cover}
+                width={240}
+                height={240}
+                alt={title}
+                class="rounded"
+            />
+            <Image
+                src="/disc.png"
+                width={240}
+                height={240}
+                alt="disc"
+                class="absolute -z-50 left-[110px] drop-shadow-2xl"
+            />
+        </picture>
+        <h3 class="text-lg font-semibold truncate w-60 mt-1">
+            {title}
+        </h3>
+    </div>
+</a>

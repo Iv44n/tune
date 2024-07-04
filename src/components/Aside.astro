@@ -1,0 +1,111 @@
+---
+import { Image } from "astro:assets";
+
+const asideLinks = [
+    [
+        {
+            name: "Home",
+            icon: "ri-home-5-line",
+            isActive: true,
+        },
+        {
+            name: "Playlist",
+            icon: "ri-play-list-line",
+            isActive: false,
+        },
+        {
+            name: "Artists",
+            icon: "ri-user-line",
+            isActive: false,
+        },
+        {
+            name: "Albums",
+            icon: "ri-folder-5-line",
+            isActive: false,
+        },
+    ],
+    [
+        {
+            name: "Radio",
+            icon: "ri-rfid-line",
+            isActive: false,
+        },
+        {
+            name: "Events",
+            icon: "ri-calendar-event-fill",
+            isActive: false,
+        },
+        {
+            name: "Podcasts",
+            icon: "ri-mic-line",
+            isActive: false,
+        },
+        {
+            name: "For You",
+            icon: "ri-heart-line",
+            isActive: false,
+        },
+    ],
+];
+---
+
+<aside
+    class="hidden md:flex flex-col bg-white p-4 rounded-md max-w-[500px] min-w-[250px] max-h-[600px] shadow-lg sticky top-6"
+>
+    <header class="flex flex-col items-center text-center gap-2 mb-6">
+        <Image
+            src="/profile.jpeg"
+            width={64}
+            height={64}
+            alt="User profile"
+            class="rounded-full"
+        />
+        <div class="w-full">
+            <h2 class="text-base font-semibold">Ivan</h2>
+            <p class="text-blue-600 text-sm truncate">ivandev2oo6@gmail.com</p>
+        </div>
+    </header>
+    <nav>
+        <div>
+            <h2 class="text-lg font-semibold">Browse</h2>
+            <ul
+                class="py-4 px-2 flex flex-col gap-4 text-zinc-600/80 font-medium text-sm"
+            >
+                {
+                    asideLinks[0].map((link) => (
+                        <li
+                            class={`${link.isActive && "text-zinc-900/90 relative cursor-pointer font-semibold"} cursor-pointer`}
+                        >
+                            {link.isActive && (
+                                <div class="absolute bg-blue-600 rounded-xl w-[2.5px] h-[16px] left-[-24px] top-[2px] active-nav" />
+                            )}
+                            <i class={`${link.icon} pr-4`} />
+                            <span class="max-[200px]:hidden">{link.name}</span>
+                        </li>
+                    ))
+                }
+            </ul>
+        </div>
+
+        <div>
+            <h2 class="text-lg font-semibold">Discover</h2>
+            <ul
+                class="py-4 px-2 flex flex-col gap-4 text-zinc-600/80 font-medium text-sm"
+            >
+                {
+                    asideLinks[1].map((link) => (
+                        <li
+                            class={`${link.isActive && "text-zinc-900/90 relative cursor-pointer font-semibold"} cursor-pointer`}
+                        >
+                            {link.isActive && (
+                                <div class="absolute bg-blue-600 rounded-xl w-[2.5px] h-[12px] left-[10px] active-nav" />
+                            )}
+                            <i class={`${link.icon} pr-4`} />
+                            <span class="max-[200px]:hidden">{link.name}</span>
+                        </li>
+                    ))
+                }
+            </ul>
+        </div>
+    </nav>
+</aside>
