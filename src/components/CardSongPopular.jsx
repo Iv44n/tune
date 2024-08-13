@@ -11,8 +11,8 @@ function CardSongPopular({ id, cover, title, artist }) {
 
     const isPlayingSong =
         isPlaying &&
-        playingMusic.typePlaylist === TYPE_PLAYLIST.SONGS_POPULAR &&
-        playingMusic.id === id;
+        playingMusic?.typePlaylist === TYPE_PLAYLIST.SONGS_POPULAR &&
+        playingMusic?.id === id;
 
     const classPlay = isPlayingSong
         ? "bg-white/60 shadow-lg shadow-blue-500/20 "

@@ -7,7 +7,6 @@ import {
     PlayTrackNext,
     PlayTrackPrev,
 } from "./PlayButtons";
-import { fetchSong } from "../utils/fetchSong";
 import SongControl from "./SongControl";
 import { TYPE_PLAYLIST } from "../consts/playlistType";
 
@@ -17,13 +16,20 @@ export default function Player() {
         isPlaying,
         setIsPlaying,
         playingMusic,
-        setPlayingMusic,
         isLoading,
         setIsLoading,
+        fetchSong
     } = useMusicStore();
 
-    const { cover, title, artist, audio, playlistLenght } = playingMusic;
+    const { cover, title, artist, audio, playlistLenght } = playingMusic || {};
     const audioRef = useRef(null);
+
+    useEffect(() => {
+        fetchSong({
+            lib: TYPE_PLAYLIST.SONGS_TOP,
+            id: 1,
+        });
+    }, []);
 
     useEffect(() => {
         if (audioRef.current) {
@@ -37,13 +43,6 @@ export default function Player() {
             isPlaying ? audioRef.current.play() : audioRef.current.pause();
         }
     }, [audio]);
-
-    useEffect(() => {
-        fetchSong({
-            lib: TYPE_PLAYLIST.SONGS_TOP,
-            id: 1,
-        }).then((data) => setPlayingMusic(data));
-    }, []);
 
     const handleClick = () => setIsPlaying(!isPlaying);
 
@@ -64,16 +63,15 @@ export default function Player() {
         };
         const id = returnId();
 
-        const data = await fetchSong({
+        await fetchSong({
             lib: playingMusic.typePlaylist,
             id,
         });
-        setPlayingMusic(data);
         setIsPlaying(true);
         setIsLoading(false);
     };
 
-    return (
+     return (
         <footer
             className={`
             flex gap-4 fixed bottom-0 w-full md:px-10 bg-[#FFFFFF] shadow-2xl shadow-blue-950 justify-between items-center

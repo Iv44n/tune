@@ -5,10 +5,10 @@ export default function SongControl({ audio, drop }) {
     const [volumeIcon, setVolumeIcon] = useState("ri-volume-up-line");
 
     useEffect(() => {
-        audio.current.addEventListener("timeupdate", audioTimeUpdate);
+        audio.current?.addEventListener("timeupdate", audioTimeUpdate);
 
         return () => {
-            audio.current.removeEventListener("timeupdate", audioTimeUpdate);
+            audio.current?.removeEventListener("timeupdate", audioTimeUpdate);
         };
     }, []);
 

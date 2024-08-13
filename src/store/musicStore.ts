@@ -9,25 +9,30 @@ interface PlayingMusic extends Song {
 interface MusicStore {
     isPlaying: boolean;
     setIsPlaying: (isPlaying: boolean) => void;
-    playingMusic: PlayingMusic;
-    setPlayingMusic: (playingMusic: PlayingMusic) => void;
+    playingMusic: PlayingMusic | null;
     isLoading: boolean;
     setIsLoading: (isLoading: boolean) => void;
+    fetchSong: ({ lib, id }: { lib: string; id: number} ) => Promise<void>;
 }
 
 export const useMusicStore = create<MusicStore>((set) => ({
     isPlaying: false,
     setIsPlaying: (isPlaying) => set({ isPlaying }),
-    playingMusic: {
-        id: 0,
-        title: "",
-        artist: "",
-        cover: "",
-        audio: "",
-        typePlaylist: "",
-        playlistLenght: 0,
-    },
-    setPlayingMusic: (playingMusic) => set({ playingMusic }),
+    playingMusic: null,
     isLoading: false,
     setIsLoading: (isLoading) => set({ isLoading }),
+    async fetchSong({ lib, id }) {
+        try {
+            const res = await fetch(`/api/songApi?lib=${lib}&id=${id}`);
+
+            if (!res.ok) {
+                throw new Error("Failed to fetch data");
+            }
+
+            const data = await res.json();
+            set({ playingMusic: data });
+        } catch (error) {
+            console.error(error);
+        }
+    },
 }));

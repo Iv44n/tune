@@ -1,30 +1,28 @@
 import { useMusicStore } from "../store/musicStore";
-import { fetchSong } from "../utils/fetchSong";
 
 function CardPlayButton({ songId, typePlaylist, isNormalButton = true }) {
     const {
         isPlaying,
         setIsPlaying,
         playingMusic,
-        setPlayingMusic,
         setIsLoading,
+        fetchSong
     } = useMusicStore();
 
     const isPlayingSong =
         isPlaying &&
-        playingMusic.typePlaylist === typePlaylist &&
-        playingMusic.id === songId;
+        playingMusic?.typePlaylist === typePlaylist &&
+        playingMusic?.id === songId;
 
     const playNewSong = async () => {
         setIsLoading(true);
         setIsPlaying(false);
 
-        const data = await fetchSong({
+        await fetchSong({
             lib: typePlaylist,
             id: songId,
         });
 
-        setPlayingMusic(data);
         setIsPlaying(true);
         setIsLoading(false);
     };
