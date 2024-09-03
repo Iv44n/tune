@@ -6,7 +6,7 @@ import eslintPluginAstro from 'eslint-plugin-astro'
 export default [
   // Configuración general para todos los archivos JS y TS
   {
-    files: ['**/*.{js,mjs,cjs,ts,astro}'],
+    files: ['**/*.{js,jsx,mjs,cjs,ts,tsx,astro}'],
     languageOptions: {
       globals: globals.node
     },
