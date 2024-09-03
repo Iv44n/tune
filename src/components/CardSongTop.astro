@@ -1,7 +1,7 @@
 ---
-import CardPlayButton from "../components/CardPlayButton";
-import { TYPE_PLAYLIST } from "../consts/playlistType";
-import { Image } from "astro:assets";
+import CardPlayButton from '../components/CardPlayButton'
+import { TYPE_PLAYLIST } from '../consts/playlistType'
+import { Image } from 'astro:assets'
 
 interface Props {
     id: number;
@@ -10,34 +10,34 @@ interface Props {
     artist: string;
 }
 
-const { id, cover, title, artist } = Astro.props;
+const { id, cover, title, artist } = Astro.props
 ---
 
-<div class="flex flex-col gap-3 relative playCard group w-60">
-    <Image
-        src={cover}
-        width={240}
-        height={240}
-        alt={title}
-        class="rounded-2xl w-full cursor-pointer shadow-lg shadow-blue-950/40 object-cover"
-    />
-    <div class="px-2">
-        <h4
-            class="text-lg font-semibold truncate ... overflow-hidden cursor-pointer"
-        >
-            {title}
-        </h4>
-        <p
-            class="text-zinc-500 text-sm cursor-pointer truncate ... overflow-hidden"
-        >
-            {artist}
-        </p>
-    </div>
+<div class='flex flex-col gap-3 relative playCard group w-60'>
+  <Image
+    src={cover}
+    width={240}
+    height={240}
+    alt={title}
+    class='rounded-2xl w-full cursor-pointer shadow-lg shadow-blue-950/40 object-cover'
+  />
+  <div class='px-2'>
+    <h4
+      class='text-lg font-semibold truncate ... overflow-hidden cursor-pointer'
+    >
+      {title}
+    </h4>
+    <p
+      class='text-zinc-500 text-sm cursor-pointer truncate ... overflow-hidden'
+    >
+      {artist}
+    </p>
+  </div>
 
-    <CardPlayButton
-        songId={id}
-        typePlaylist={TYPE_PLAYLIST.SONGS_TOP}
-        isNormalButton={false}
-        client:visible
-    />
+  <CardPlayButton
+    songId={id}
+    typePlaylist={TYPE_PLAYLIST.SONGS_TOP}
+    isNormalButton={false}
+    client:visible
+  />
 </div>

@@ -1,23 +1,23 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-    content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
-    theme: {
-        extend: {
-            transitionProperty: {
-                height: "height",
-            },
+  content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
+  theme: {
+    extend: {
+      transitionProperty: {
+        height: 'height'
+      }
+    }
+  },
+  plugins: [
+    function ({ addUtilities }) {
+      addUtilities({
+        '.custom-scrollbar::-webkit-scrollbar-thumb': {
+          background: '#0059ffbe'
         },
-    },
-    plugins: [
-        function ({ addUtilities }) {
-            addUtilities({
-                ".custom-scrollbar::-webkit-scrollbar-thumb": {
-                    background: "#0059ffbe",
-                },
-                ".h-area": {
-                    height: "calc(100% - env(safe-area-inset-bottom))",
-                },
-            });
-        },
-    ],
-};
+        '.h-area': {
+          height: 'calc(100% - env(safe-area-inset-bottom))'
+        }
+      })
+    }
+  ]
+}

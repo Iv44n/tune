@@ -1,42 +1,42 @@
 ---
-import 'remixicon/fonts/remixicon.css';
-import Aside from '../components/Aside.astro';
-import Player from '../components/Player.jsx';
-import { ViewTransitions } from "astro:transitions";
-import '@fontsource/barlow/400.css';
-import '@fontsource/barlow/500.css';
-import '@fontsource/barlow/600.css';
+import 'remixicon/fonts/remixicon.css'
+import Aside from '../components/Aside.astro'
+import Player from '../components/Player.jsx'
+import { ViewTransitions } from 'astro:transitions'
+import '@fontsource/barlow/400.css'
+import '@fontsource/barlow/500.css'
+import '@fontsource/barlow/600.css'
 
 interface Props {
 	title: string;
 }
 
-const { title } = Astro.props;
+const { title } = Astro.props
 ---
 
 <!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="description" content="Astro description" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
+<html lang='en'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='description' content='Astro description' />
+    <meta name='viewport' content='width=device-width' />
+    <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
+    <meta name='generator' content={Astro.generator} />
+    <title>{title}</title>
 
 		<!-- Transitions -->
 		<ViewTransitions fallback='none'/>
-	</head>
+  </head>
 
-	<body class="bg-[#f4f6ff] min-h-screen">
-		<div class="pt-6 px-3 md:px-6 gap-6 w-full flex">
-			<Aside/>
-			<main class="flex flex-col gap-5">
-				<slot />
-			</main>
-		</div>
-		<Player transition:persist client:load transition:name="player"/>
-	</body>
+  <body class='bg-[#f4f6ff] min-h-screen'>
+    <div class='pt-6 px-3 md:px-6 gap-6 w-full flex'>
+      <Aside/>
+      <main class='flex flex-col gap-5'>
+        <slot />
+      </main>
+    </div>
+    <Player transition:persist client:load transition:name='player'/>
+  </body>
 
 </html>
 
@@ -54,7 +54,7 @@ const { title } = Astro.props;
     	height: 6px;
 		color: transparent;
       }
-	
+
     *::-webkit-scrollbar-thumb {
         border-radius: 4px;
     }

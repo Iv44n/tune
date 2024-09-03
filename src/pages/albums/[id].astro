@@ -1,51 +1,51 @@
 ---
-import Layout from "../../layouts/Layout.astro";
-import { albums } from "../../lib/data";
+import Layout from '../../layouts/Layout.astro'
+import { albums } from '../../lib/data'
 
-const { id } = Astro.params;
+const { id } = Astro.params
 
-const albumData = albums.find((album) => album.id === parseInt(id));
-const { title, cover, artist, year, songNumber } = albumData;
+const albumData = albums.find((album) => album.id === parseInt(id))
+const { title, cover, artist, year, songNumber } = albumData
 ---
 
 <Layout title={`Album n° ${id} - ${title}`}>
-    <div>
-        <a href="/" class="text-3xl"><i class="ri-arrow-left-s-line"></i></a>
-        <header
-            class="flex md:items-end gap-4 flex-col md:flex-row w-full mt-2"
+  <div>
+    <a href='/' class='text-3xl'><i class='ri-arrow-left-s-line'></i></a>
+    <header
+      class='flex md:items-end gap-4 flex-col md:flex-row w-full mt-2'
+    >
+      <picture>
+        <img
+          src={cover}
+          alt=''
+          class='w-60 md:w-56 rounded-md'
+          transition:name={`${title}-image`}
+        />
+      </picture>
+      <article class='flex items-start flex-col'>
+        <span class='hidden md:block'>Álbum</span>
+        <h1
+          class='text-4xl md:text-7xl font-semibold'
+          transition:name={`${title}-title`}
         >
-            <picture>
-                <img
-                    src={cover}
-                    alt=""
-                    class="w-60 md:w-56 rounded-md"
-                    transition:name={`${title}-image`}
-                />
-            </picture>
-            <article class="flex items-start flex-col">
-                <span class="hidden md:block">Álbum</span>
-                <h1
-                    class="text-4xl md:text-7xl font-semibold"
-                    transition:name={`${title}-title`}
-                >
-                    {title}
-                </h1>
-                <div
-                    class="flex md:gap-6 md:items-center flex-col md:flex-row text-lg"
-                >
-                    <h3 class="font-medium text-xl">{artist}</h3>
-                    <span class="hidden md:block">.</span>
-                    <p class="text-gray-700">
-                        <span class="md:hidden">Álbum -</span>{year}
-                    </p>
-                    <span class="hidden md:block">.</span>
-                    <p class="text-gray-700 hidden md:block">
-                        {songNumber} Canciones
-                    </p>
-                </div>
-            </article>
-            <hr class="bg-black md:hidden" />
-        </header>
-    </div>
-    <hr class="bg-black/4 0 hidden md:block h-[1.2px]" />
+          {title}
+        </h1>
+        <div
+          class='flex md:gap-6 md:items-center flex-col md:flex-row text-lg'
+        >
+          <h3 class='font-medium text-xl'>{artist}</h3>
+          <span class='hidden md:block'>.</span>
+          <p class='text-gray-700'>
+            <span class='md:hidden'>Álbum -</span>{year}
+          </p>
+          <span class='hidden md:block'>.</span>
+          <p class='text-gray-700 hidden md:block'>
+            {songNumber} Canciones
+          </p>
+        </div>
+      </article>
+      <hr class='bg-black md:hidden' />
+    </header>
+  </div>
+  <hr class='bg-black/4 0 hidden md:block h-[1.2px]' />
 </Layout>

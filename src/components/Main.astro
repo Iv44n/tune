@@ -1,87 +1,87 @@
 ---
-import { albums, songsTop, songsPopular } from "../lib/data";
-import ListCardSongPopular from "./ListCardSongPopular";
-import AlbumCard from "./AlbumCard.astro";
-import CardSongTop from "./CardSongTop.astro";
-import Message from "./Message.astro";
+import { albums, songsTop, songsPopular } from '../lib/data'
+import ListCardSongPopular from './ListCardSongPopular'
+import AlbumCard from './AlbumCard.astro'
+import CardSongTop from './CardSongTop.astro'
+import Message from './Message.astro'
 ---
 
-<header class="flex md:justify-between gap-4 items-center w-full">
-    <div class="flex items-center gap-4 w-full">
-        <i
-            class="ri-menu-3-fill cursor-pointer text-xl md:hidden"
-            id="icon-toggle"></i>
-        <i class="ri-search-line cursor-pointer text-xl"></i>
-        <input
-            type="text"
-            class="w-[80%] rounded-2xl p-2 placeholder:text-base truncate"
-            placeholder="Search for song, artists, etc..."
-        />
-    </div>
+<header class='flex md:justify-between gap-4 items-center w-full'>
+  <div class='flex items-center gap-4 w-full'>
+    <i
+      class='ri-menu-3-fill cursor-pointer text-xl md:hidden'
+      id='icon-toggle'></i>
+    <i class='ri-search-line cursor-pointer text-xl'></i>
+    <input
+      type='text'
+      class='w-[80%] rounded-2xl p-2 placeholder:text-base truncate'
+      placeholder='Search for song, artists, etc...'
+    />
+  </div>
 
-    <div class="flex gap-4 md:gap-6 text-xl items-center">
-        <i class="ri-settings-line"></i>
-        <i class="ri-notification-line"></i>
-    </div>
+  <div class='flex gap-4 md:gap-6 text-xl items-center'>
+    <i class='ri-settings-line'></i>
+    <i class='ri-notification-line'></i>
+  </div>
 </header>
 
 <Message />
 
 <section>
-    <article class="flex justify-between text-xl">
-        <h2 class="font-semibold">Top Music</h2>
-        <div class="flex gap-4">
-            <i
-                class="ri-arrow-left-line cursor-pointer btn hover:text-blue-600"
-                id="left"></i>
-            <i
-                class="ri-arrow-right-line cursor-pointer btn hover:text-blue-600"
-                id="right"></i>
-        </div>
-    </article>
+  <article class='flex justify-between text-xl'>
+    <h2 class='font-semibold'>Top Music</h2>
+    <div class='flex gap-4'>
+      <i
+        class='ri-arrow-left-line cursor-pointer btn hover:text-blue-600'
+        id='left'></i>
+      <i
+        class='ri-arrow-right-line cursor-pointer btn hover:text-blue-600'
+        id='right'></i>
+    </div>
+  </article>
 
-    <article class="flex w-full py-4">
-        <ul class="carousel gap-8 overflow-x-auto hover:custom-scrollbar">
-            {
-                songsTop.map((song) => (
-                    <li class="card">
-                        <CardSongTop
-                            id={song.id}
-                            cover={song.cover}
-                            title={song.title}
-                            artist={song.artist}
-                        />
-                    </li>
-                ))
-            }
-        </ul>
-    </article>
+  <article class='flex w-full py-4'>
+    <ul class='carousel gap-8 overflow-x-auto hover:custom-scrollbar'>
+      {
+        songsTop.map((song) => (
+          <li class='card'>
+            <CardSongTop
+              id={song.id}
+              cover={song.cover}
+              title={song.title}
+              artist={song.artist}
+            />
+          </li>
+        ))
+      }
+    </ul>
+  </article>
 </section>
 
-<section class="flex w-full flex-wrap mb-24 gap-4">
-    <article class="w-full sm:min-w-[440px] flex-1">
-        <h3 class="font-semibold text-xl">Popular</h3>
-        <div
-            class="pt-2 md:pr-6 flex flex-col gap-4 mt-2 overflow-y-auto hover:custom-scrollbar w-full pb-6 md:max-h-[320px]"
-            id="container"
-        >
-            <ListCardSongPopular
-                songsPopular={songsPopular}
-                client:visible
-            />
-        </div>
-    </article>
+<section class='flex w-full flex-wrap mb-24 gap-4'>
+  <article class='w-full sm:min-w-[440px] flex-1'>
+    <h3 class='font-semibold text-xl'>Popular</h3>
+    <div
+      class='pt-2 md:pr-6 flex flex-col gap-4 mt-2 overflow-y-auto hover:custom-scrollbar w-full pb-6 md:max-h-[320px]'
+      id='container'
+    >
+      <ListCardSongPopular
+        songsPopular={songsPopular}
+        client:visible
+      />
+    </div>
+  </article>
 
-    <article class="w-full sm:min-w-[440px] flex-1">
-        <h3 class="font-semibold text-xl">Recommended Album</h3>
-        <div class="flex gap-40 overflow-x-auto hover:custom-scrollbar pb-6">
-            {
-                albums.map((album) => {
-                    return <AlbumCard album={album} />;
-                })
-            }
-        </div>
-    </article>
+  <article class='w-full sm:min-w-[440px] flex-1'>
+    <h3 class='font-semibold text-xl'>Recommended Album</h3>
+    <div class='flex gap-40 overflow-x-auto hover:custom-scrollbar pb-6'>
+      {
+        albums.map((album) => {
+          return <AlbumCard album={album} />
+        })
+      }
+    </div>
+  </article>
 </section>
 
 <style>
@@ -95,23 +95,23 @@ import Message from "./Message.astro";
 </style>
 
 <script>
-    document.addEventListener("astro:after-swap", setupCarousel);
+document.addEventListener('astro:after-swap', setupCarousel)
 
-    function setupCarousel() {
-        const carousel = document.querySelector(".carousel");
-        const buttons = document.querySelectorAll(".btn");
-        const card = document.querySelector(".card") as HTMLLIElement;
+function setupCarousel() {
+  const carousel = document.querySelector('.carousel')
+  const buttons = document.querySelectorAll('.btn')
+  const card = document.querySelector('.card') as HTMLLIElement
 
-        if (card) {
-            const widthCard = card.offsetWidth + 32;
-            buttons.forEach((btn) => {
-                btn.addEventListener("click", () => {
-                    carousel.scrollLeft +=
-                        btn.id === "left" ? -widthCard : widthCard;
-                });
-            });
-        }
-    }
+  if (card) {
+    const widthCard = card.offsetWidth + 32
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        carousel.scrollLeft +=
+                        btn.id === 'left' ? -widthCard : widthCard
+      })
+    })
+  }
+}
 
-    setupCarousel();
+setupCarousel()
 </script>
