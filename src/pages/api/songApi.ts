@@ -15,7 +15,7 @@ const searchSongById = (lib: string, id: number) => {
   }
 }
 
-export const GET: APIRoute = async ({ request }) => {
+export const GET: APIRoute = ({ request }) => {
   try {
     const { url } = request
     const urlObj = new URL(url)
@@ -34,7 +34,7 @@ export const GET: APIRoute = async ({ request }) => {
 
     const playlistLenght = library === TYPE_PLAYLIST.SONGS_TOP ? songsTop.length : songsPopular.length
 
-    const song: Song = searchSongById(library, id)
+    const song: Song | undefined = searchSongById(library, id)
 
     if (!song) {
       return new Response(JSON.stringify({ error: 'Song not found' }), {
@@ -49,7 +49,7 @@ export const GET: APIRoute = async ({ request }) => {
     })
   } catch (error) {
     return new Response(JSON.stringify({ error: error.message }), {
-      status: 400,
+      status: 500,
       statusText: 'Internal Server Error'
     })
   }

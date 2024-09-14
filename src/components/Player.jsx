@@ -52,7 +52,7 @@ export default function Player() {
     playNewSong({ lib: playingMusic.typePlaylist, id })
   }
 
-  return playingMusic && (
+  return (
     <footer
       className={`
             flex gap-4 fixed bottom-0 w-full md:px-10 bg-[#FFFFFF] shadow-2xl shadow-blue-950 justify-between items-center
