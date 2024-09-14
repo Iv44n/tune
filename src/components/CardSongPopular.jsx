@@ -4,10 +4,10 @@ import { TYPE_PLAYLIST } from '../consts/playlistType'
 import CardPlayButton from './CardPlayButton'
 
 function CardSongPopular({ id, cover, title, artist }) {
-  const [like, setLike] = useState(false)
-  const classIconHeart = like ? 'fill text-red-600' : 'line'
-
   const { isPlaying, playingMusic } = useMusicStore()
+  const [like, setLike] = useState(false)
+
+  const classIconHeart = like ? 'fill text-red-600' : 'line'
 
   const isPlayingSong =
         isPlaying &&
@@ -15,13 +15,11 @@ function CardSongPopular({ id, cover, title, artist }) {
         playingMusic?.id === id
 
   const classPlay = isPlayingSong
-    ? 'bg-white/60 shadow-lg shadow-blue-500/20 '
-    : ''
+    ? 'flex justify-between rounded-full px-3 md:px-5 py-3 bg-white/60 shadow-lg shadow-blue-500/20 '
+    : 'flex justify-between rounded-full px-3 md:px-5 py-3 '
 
   return (
-    <div
-      className={`flex justify-between rounded-full px-3 md:px-5 py-3 ${classPlay}`}
-    >
+    <div className={classPlay}>
       <div className='flex gap-3 items-center flex-1'>
         <CardPlayButton
           songId={id}
