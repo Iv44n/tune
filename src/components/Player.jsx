@@ -8,48 +8,34 @@ import {
   PlayTrackPrev
 } from './PlayButtons'
 import SongControl from './SongControl'
-import { TYPE_PLAYLIST } from '../consts/playlistType'
+import usePlayNewSong from '../hooks/usePlayNewSong'
 
 export default function Player() {
   const [drop, setDrop] = useState(false)
-  const {
-    isPlaying,
-    setIsPlaying,
-    playingMusic,
-    isLoading,
-    setIsLoading,
-    fetchSong
-  } = useMusicStore()
+  const { isPlaying, setIsPlaying, playingMusic, isLoading } = useMusicStore()
+  const { playNewSong } = usePlayNewSong()
 
   const { cover, title, artist, audio, playlistLenght } = playingMusic || {}
   const audioRef = useRef(null)
 
   useEffect(() => {
-    fetchSong({
-      lib: TYPE_PLAYLIST.SONGS_TOP,
-      id: 1
-    })
-  }, [])
+    if(!audioRef.current) return
 
-  useEffect(() => {
-    if (audioRef.current) {
-      isPlaying ? audioRef.current.play() : audioRef.current.pause()
-    }
+    if (isPlaying) audioRef.current.play()
+    else audioRef.current.pause()
   }, [isPlaying])
 
   useEffect(() => {
-    if (audioRef.current && audio !== audioRef.current.src) {
-      audioRef.current.src = audio
-      isPlaying ? audioRef.current.play() : audioRef.current.pause()
-    }
+    if (!audio || !audioRef.current && !(audio !== audioRef.current.src)) return
+
+    audioRef.current.src = audio
+    if (isPlaying) audioRef.current.play()
+    else audioRef.current.pause()
   }, [audio])
 
   const handleClick = () => setIsPlaying(!isPlaying)
 
-  const fetchNextSong = async (offset) => {
-    setIsLoading(true)
-    setIsPlaying(false)
-
+  const fetchNextSong = (offset) => {
     const returnId = () => {
       if (offset === -1) {
         return playingMusic.id === 1
@@ -61,17 +47,12 @@ export default function Player() {
           : playingMusic.id + 1
       }
     }
-    const id = returnId()
 
-    await fetchSong({
-      lib: playingMusic.typePlaylist,
-      id
-    })
-    setIsPlaying(true)
-    setIsLoading(false)
+    const id = returnId()
+    playNewSong({ lib: playingMusic.typePlaylist, id })
   }
 
-  return (
+  return playingMusic && (
     <footer
       className={`
             flex gap-4 fixed bottom-0 w-full md:px-10 bg-[#FFFFFF] shadow-2xl shadow-blue-950 justify-between items-center

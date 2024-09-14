@@ -1,41 +1,19 @@
+import usePlayNewSong from '../hooks/usePlayNewSong'
 import { useMusicStore } from '../store/musicStore'
 
 function CardPlayButton({ songId, typePlaylist, isNormalButton = true }) {
-  const {
-    isPlaying,
-    setIsPlaying,
-    playingMusic,
-    setIsLoading,
-    fetchSong
-  } = useMusicStore()
+  const { isPlaying, setIsPlaying, playingMusic } = useMusicStore()
+  const { playNewSong } = usePlayNewSong()
 
-  const isPlayingSong =
-        isPlaying &&
-        playingMusic?.typePlaylist === typePlaylist &&
-        playingMusic?.id === songId
-
-  const playNewSong = async () => {
-    setIsLoading(true)
-    setIsPlaying(false)
-
-    await fetchSong({
-      lib: typePlaylist,
-      id: songId
-    })
-
-    setIsPlaying(true)
-    setIsLoading(false)
-  }
+  const isCurrentSong = playingMusic?.id === songId && playingMusic?.typePlaylist === typePlaylist
+  const isPlayingSong = isPlaying && isCurrentSong
 
   const handleClick = () => {
-    if (
-      playingMusic?.id === songId &&
-            playingMusic.typePlaylist === typePlaylist
-    ) {
+    if (isCurrentSong) {
       setIsPlaying(!isPlaying)
       return
     }
-    playNewSong()
+    playNewSong({ lib: typePlaylist, id: songId })
   }
 
   const classBut = isPlayingSong ? 'text-blue-600' : 'text-slate-950/75'
