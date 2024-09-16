@@ -1,9 +1,13 @@
 import { create } from 'zustand'
-import type { Song } from '../types/dataMusic'
+import type { Song, PlaylistTypeValue } from '../types/dataMusic'
 
 interface PlayingMusic extends Song {
-  typePlaylist: string;
   playlistLenght: number;
+}
+
+interface PropsForFetchSong {
+  lib: PlaylistTypeValue
+  id: number
 }
 
 interface MusicStore {
@@ -12,7 +16,7 @@ interface MusicStore {
   playingMusic: PlayingMusic | null;
   isLoading: boolean;
   setIsLoading: (isLoading: boolean) => void;
-  fetchSong: ({ lib, id }: { lib: string; id: number} ) => Promise<void>;
+  fetchSong: ({ lib, id }: PropsForFetchSong ) => Promise<void>;
 }
 
 export const useMusicStore = create<MusicStore>((set) => ({

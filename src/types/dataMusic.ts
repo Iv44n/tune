@@ -1,3 +1,5 @@
+import type { TYPE_PLAYLIST } from '../consts/playlistType'
+
 export interface SongBase {
   cover: string;
   title: string;
@@ -5,9 +7,11 @@ export interface SongBase {
   audio: string;
 }
 
+export type PlaylistTypeValue = typeof TYPE_PLAYLIST[keyof typeof TYPE_PLAYLIST]
+
 export interface Song extends SongBase {
   id: number;
-  typePlaylist?: string;
+  typePlaylist?: PlaylistTypeValue;
 }
 
 export interface AllSongs extends SongBase {

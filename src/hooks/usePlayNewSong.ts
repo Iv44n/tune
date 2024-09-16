@@ -1,10 +1,16 @@
 import { useCallback } from 'react'
 import { useMusicStore } from '../store/musicStore'
+import type { PlaylistTypeValue } from '../types/dataMusic'
+
+interface Props {
+  lib: PlaylistTypeValue
+  id: number
+}
 
 const usePlayNewSong = () => {
   const { setIsPlaying, setIsLoading, fetchSong } = useMusicStore()
 
-  const playNewSong = useCallback(async ({ lib, id }) => {
+  const playNewSong = useCallback(async ({ lib, id }: Props) => {
     setIsLoading(true)
     setIsPlaying(false)
 
