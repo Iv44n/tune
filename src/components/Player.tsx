@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, type MutableRefObject } from 'react'
 import { useMusicStore } from '../store/musicStore'
 import {
   Loading,
@@ -15,41 +15,62 @@ export default function Player() {
   const { isPlaying, setIsPlaying, playingMusic, isLoading } = useMusicStore()
   const { playNewSong } = usePlayNewSong()
 
-  const { cover, title, artist, audio, playlistLenght } = playingMusic || {}
-  const audioRef = useRef(null)
+  const {
+    cover = '',
+    title = '',
+    artist = '',
+    audio = '',
+    playlistLenght,
+    typePlaylist
+  } = playingMusic || {}
+
+  const audioRef: MutableRefObject<HTMLAudioElement | null> = useRef(null)
 
   useEffect(() => {
-    if(!audioRef.current) return
+    if (!audioRef.current) return
 
     if (isPlaying) audioRef.current.play()
     else audioRef.current.pause()
   }, [isPlaying])
 
   useEffect(() => {
-    if (!audio || !audioRef.current && !(audio !== audioRef.current.src)) return
+    const audioEl = audioRef.current
+    if (!audioEl || !audio) return
 
-    audioRef.current.src = audio
-    if (isPlaying) audioRef.current.play()
-    else audioRef.current.pause()
-  }, [audio])
+    if (audio !== audioEl.src && audioEl) {
+      audioEl.src = audio
+    }
+
+    if (isPlaying && audioEl.paused) {
+      audioEl.play()
+    } else if (!isPlaying && !audioEl.paused) {
+      audioEl.pause()
+    }
+
+    return () => {
+      if (!audioEl.paused) {
+        audioEl.pause()
+        setIsPlaying(false)
+      }
+      audioEl.src = ''
+    }
+  }, [audio, audioRef])
 
   const handleClick = () => setIsPlaying(!isPlaying)
 
-  const fetchNextSong = (offset) => {
+  const fetchNextSong = (offset: number) => {
+    if (!playingMusic || !typePlaylist || !playlistLenght) return
+
     const returnId = () => {
       if (offset === -1) {
-        return playingMusic.id === 1
-          ? playlistLenght
-          : playingMusic.id - 1
+        return playingMusic.id === 1 ? playlistLenght : playingMusic.id - 1
       } else {
-        return playingMusic.id === playlistLenght
-          ? 1
-          : playingMusic.id + 1
+        return playingMusic.id === playlistLenght ? 1 : playingMusic.id + 1
       }
     }
 
     const id = returnId()
-    playNewSong({ lib: playingMusic.typePlaylist, id })
+    playNewSong({ lib: typePlaylist, id })
   }
 
   return (
@@ -84,13 +105,7 @@ export default function Player() {
             className='text-black cursor-pointer w-9 h-9'
             onClick={handleClick}
           >
-            {isLoading ? (
-              <Loading />
-            ) : isPlaying ? (
-              <Play />
-            ) : (
-              <Pause />
-            )}
+            {isLoading ? <Loading /> : isPlaying ? <Play /> : <Pause />}
           </button>
 
           <button onClick={() => fetchNextSong(1)}>
@@ -104,12 +119,8 @@ export default function Player() {
           ></audio>
         </div>
 
-        <div
-          className={`md:flex gap-10 ${
-            drop ? 'block w-full' : 'hidden'
-          }`}
-        >
-          <SongControl audio={audioRef} drop={drop} />
+        <div className={`md:flex gap-10 ${drop ? 'block w-full' : 'hidden'}`}>
+          {!audioRef && <SongControl audio={audioRef} drop={drop} />}
         </div>
       </div>
 
@@ -125,7 +136,21 @@ export default function Player() {
   )
 }
 
-function MobilePlayer({ cover, title, artist, drop, setDrop }) {
+interface MobilePlayerProps {
+  cover: string
+  title: string
+  artist: string
+  drop: boolean
+  setDrop: (drop: boolean) => void
+}
+
+function MobilePlayer({
+  cover,
+  title,
+  artist,
+  drop,
+  setDrop
+}: MobilePlayerProps) {
   const [like, setLike] = useState(false)
   const classIconHeart = like ? 'fill text-red-600' : 'line'
 
@@ -157,8 +182,7 @@ function MobilePlayer({ cover, title, artist, drop, setDrop }) {
               className='w-full h-full object-cover'
               loading='lazy'
               style={{
-                maskImage:
-                                    'linear-gradient(black 90%, transparent)'
+                maskImage: 'linear-gradient(black 90%, transparent)'
               }}
             />
             <button
@@ -178,10 +202,7 @@ function MobilePlayer({ cover, title, artist, drop, setDrop }) {
                 {artist}
               </p>
             </div>
-            <div
-              onClick={() => setLike(!like)}
-              className='text-3xl'
-            >
+            <div onClick={() => setLike(!like)} className='text-3xl'>
               <i className={`ri-heart-2-${classIconHeart}`}></i>
             </div>
           </div>
