@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import CardSongPopular from './CardSongPopular.jsx'
+import CardSongPopular from './CardSongPopular.tsx'
 import type { Song } from '../types/dataMusic.js'
 
 export default function ListCardSongPopular({ songsPopular }: { songsPopular: Song[] }) {
