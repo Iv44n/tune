@@ -1,7 +1,14 @@
 import usePlayNewSong from '../hooks/usePlayNewSong'
 import { useMusicStore } from '../store/musicStore'
+import type { PlaylistTypeValue } from '../types/dataMusic'
 
-function CardPlayButton({ songId, typePlaylist, isNormalButton = true }) {
+interface CardPlayButtonProps {
+  songId: number
+  typePlaylist: PlaylistTypeValue
+  isNormalButton?: boolean
+}
+
+function CardPlayButton({ songId, typePlaylist, isNormalButton = true }: CardPlayButtonProps) {
   const { isPlaying, setIsPlaying, playingMusic } = useMusicStore()
   const { playNewSong } = usePlayNewSong()
 

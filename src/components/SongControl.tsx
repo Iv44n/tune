@@ -1,6 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type ChangeEvent, type MutableRefObject } from 'react'
 
-export default function SongControl({ audio, drop }) {
+interface SongControlProps {
+  audio: MutableRefObject<HTMLAudioElement>
+  drop: boolean
+}
+
+export default function SongControl({ audio, drop }: SongControlProps) {
   const [currentTime, setCurrentTime] = useState(0)
   const [volumeIcon, setVolumeIcon] = useState('ri-volume-up-line')
 
@@ -16,7 +21,7 @@ export default function SongControl({ audio, drop }) {
     setCurrentTime(audio.current?.currentTime)
   }
 
-  const formatTime = (time) => {
+  const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60)
     const seconds = Math.floor(time % 60)
     return `${minutes}:${seconds.toString().padStart(2, '0')}`
@@ -32,7 +37,7 @@ export default function SongControl({ audio, drop }) {
     mute: 'ri-volume-mute-line'
   }
 
-  const handleVolume = (e) => {
+  const handleVolume = (e: ChangeEvent<HTMLInputElement>) => {
     const newVolume = parseInt(e.target.value)
 
     if (newVolume === 0) {
@@ -64,7 +69,7 @@ export default function SongControl({ audio, drop }) {
           max={result}
           onChange={(e) => {
             const newCurrentTime = e.target.value
-            audio.current.currentTime = newCurrentTime
+            audio.current.currentTime = parseInt(newCurrentTime)
           }}
         />
 

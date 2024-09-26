@@ -2,8 +2,13 @@ import { useState } from 'react'
 import { useMusicStore } from '../store/musicStore'
 import { TYPE_PLAYLIST } from '../consts/playlistType'
 import CardPlayButton from './CardPlayButton'
+import type { SongBase } from '../types/dataMusic'
 
-function CardSongPopular({ id, cover, title, artist }) {
+interface CardSongPopularProps extends SongBase {
+  id: number
+}
+
+function CardSongPopular({ id, cover, title, artist }: CardSongPopularProps) {
   const { isPlaying, playingMusic } = useMusicStore()
   const [like, setLike] = useState(false)
 
