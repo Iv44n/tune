@@ -8,21 +8,16 @@ interface Props {
 }
 
 const usePlayNewSong = () => {
-  const { setIsPlaying, setIsLoading, fetchSong } = useMusicStore()
+  const { fetchSong } = useMusicStore()
 
   const playNewSong = useCallback(async ({ lib, id }: Props) => {
-    setIsLoading(true)
-    setIsPlaying(false)
-
     try {
       await fetchSong({ lib, id })
-      setIsPlaying(true)
     } catch (error) {
       console.error('Error fetching song:', error)
-    } finally {
-      setIsLoading(false)
     }
-  }, [fetchSong, setIsLoading, setIsPlaying])
+  }, [fetchSong])
+
   return { playNewSong }
 }
 
