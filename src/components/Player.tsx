@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, type MutableRefObject } from 'react'
+import { useEffect, useState, useRef, useCallback, type MutableRefObject } from 'react'
 import { useMusicStore } from '../store/musicStore'
 import {
   Loading,
@@ -9,6 +9,7 @@ import {
 } from './PlayButtons'
 import SongControl from './SongControl'
 import usePlayNewSong from '../hooks/usePlayNewSong'
+import MobilePlayer from './MobilePlayer'
 
 export default function Player() {
   const [drop, setDrop] = useState(false)
@@ -29,23 +30,18 @@ export default function Player() {
   useEffect(() => {
     if (!audioRef.current) return
 
-    if (isPlaying) audioRef.current.play()
-    else audioRef.current.pause()
+    isPlaying ? audioRef.current.play() : audioRef.current.pause()
   }, [isPlaying])
 
   useEffect(() => {
     const audioEl = audioRef.current
     if (!audioEl || !audio) return
 
-    if (audio !== audioEl.src && audioEl) {
+    if (audio !== audioEl.src) {
       audioEl.src = audio
     }
 
-    if (isPlaying && audioEl.paused) {
-      audioEl.play()
-    } else if (!isPlaying && !audioEl.paused) {
-      audioEl.pause()
-    }
+    isPlaying && audioEl.paused ? audioEl.play() : audioEl.pause()
 
     return () => {
       if (!audioEl.paused) {
@@ -56,9 +52,9 @@ export default function Player() {
     }
   }, [audio, audioRef])
 
-  const handleClick = () => setIsPlaying(!isPlaying)
+  const handleClick = useCallback(() => setIsPlaying(!isPlaying), [setIsPlaying, isPlaying])
 
-  const fetchNextSong = (offset: number) => {
+  const fetchNextSong = useCallback(async (offset: number) => {
     if (!playingMusic || !typePlaylist || !playlistLenght) return
 
     const returnId = () => {
@@ -70,8 +66,9 @@ export default function Player() {
     }
 
     const id = returnId()
-    playNewSong({ lib: typePlaylist, id })
-  }
+    await playNewSong({ lib: typePlaylist, id })
+
+  }, [playNewSong, playingMusic, playlistLenght, typePlaylist])
 
   return (
     <footer
@@ -120,7 +117,7 @@ export default function Player() {
         </div>
 
         <div className={`md:flex gap-10 ${drop ? 'block w-full' : 'hidden'}`}>
-          {!audioRef && <SongControl audio={audioRef} drop={drop} />}
+          <SongControl audio={audioRef} drop={drop} />
         </div>
       </div>
 
@@ -133,81 +130,5 @@ export default function Player() {
         <i className='ri-arrow-up-s-line'></i>
       </button>
     </footer>
-  )
-}
-
-interface MobilePlayerProps {
-  cover: string
-  title: string
-  artist: string
-  drop: boolean
-  setDrop: (drop: boolean) => void
-}
-
-function MobilePlayer({
-  cover,
-  title,
-  artist,
-  drop,
-  setDrop
-}: MobilePlayerProps) {
-  const [like, setLike] = useState(false)
-  const classIconHeart = like ? 'fill text-red-600' : 'line'
-
-  return (
-    <>
-      {!drop ? (
-        <div className='flex items-center gap-2 w-[250px]'>
-          <img
-            src={cover}
-            alt={`${title} - ${artist} - Image`}
-            className='rounded-full w-12 h-12  md:w-14 md:h-14'
-            loading='lazy'
-          />
-          <div className='flex-1 overflow-hidden max-w-[200px]'>
-            <h3 className='text-base font-semibold truncate ... overflow-hidden'>
-              {title}
-            </h3>
-            <p className='text-zinc-500 text-sm truncate ... overflow-hidden'>
-              {artist}
-            </p>
-          </div>
-        </div>
-      ) : (
-        <article className='w-full h-full relative'>
-          <div className='bg-cover bg-center bg-no-repeat h-[85%]'>
-            <img
-              src={cover}
-              alt={`${title} - ${artist} - Image`}
-              className='w-full h-full object-cover'
-              loading='lazy'
-              style={{
-                maskImage: 'linear-gradient(black 90%, transparent)'
-              }}
-            />
-            <button
-              className='absolute top-2 left-4 text-3xl font-medium grid place-content-center text-gray-200 pt-3 transition duration-300 rounded-full'
-              onClick={() => setDrop(!drop)}
-            >
-              <i className='ri-arrow-left-s-line'></i>
-            </button>
-          </div>
-
-          <div className='w-full flex justify-between items-center px-5 my-5 relative'>
-            <div className='max-w-[50%]'>
-              <h3 className='text-xl font-semibold truncate ... overflow-hidden'>
-                {title}
-              </h3>
-              <p className='text-zinc-500 truncate ... overflow-hidden'>
-                {artist}
-              </p>
-            </div>
-            <div onClick={() => setLike(!like)} className='text-3xl'>
-              <i className={`ri-heart-2-${classIconHeart}`}></i>
-            </div>
-          </div>
-        </article>
-      )}
-    </>
   )
 }

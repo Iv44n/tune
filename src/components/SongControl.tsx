@@ -1,7 +1,7 @@
 import { useEffect, useState, type ChangeEvent, type MutableRefObject } from 'react'
 
 interface SongControlProps {
-  audio: MutableRefObject<HTMLAudioElement>
+  audio: MutableRefObject<HTMLAudioElement | null>
   drop: boolean
 }
 
@@ -18,6 +18,7 @@ export default function SongControl({ audio, drop }: SongControlProps) {
   }, [])
 
   const audioTimeUpdate = () => {
+    if (!audio.current) return
     setCurrentTime(audio.current?.currentTime)
   }
 
@@ -38,6 +39,7 @@ export default function SongControl({ audio, drop }: SongControlProps) {
   }
 
   const handleVolume = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!audio.current) return
     const newVolume = parseInt(e.target.value)
 
     if (newVolume === 0) {
@@ -68,6 +70,7 @@ export default function SongControl({ audio, drop }: SongControlProps) {
           min='0'
           max={result}
           onChange={(e) => {
+            if (!audio.current) return
             const newCurrentTime = e.target.value
             audio.current.currentTime = parseInt(newCurrentTime)
           }}
