@@ -26,7 +26,8 @@ export default [
       'camelcase': 'error',
       'astro/no-unused-css-selector': 'off',
       'astro/semi': ['error', 'never'],
-      'jsx-quotes': ['error', 'prefer-single']
+      'jsx-quotes': ['error', 'prefer-single'],
+      '@typescript-eslint/no-unused-expressions': ['error', { allowShortCircuit: false, allowTernary: true }]
     }
   },
 
