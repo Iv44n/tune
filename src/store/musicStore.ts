@@ -1,13 +1,16 @@
 import { create } from 'zustand'
-import type { MusicStore } from './storeTypes'
+import { initialSong } from '../lib/data'
+import type { MusicStore } from '../types/storeTypes'
 
 export const useMusicStore = create<MusicStore>((set) => ({
   isPlaying: false,
   setIsPlaying: (isPlaying) => set({ isPlaying }),
-  playingMusic: null,
+  playingMusic: initialSong,
   isLoading: false,
   setIsLoading: (isLoading) => set({ isLoading }),
   async fetchSong({ lib, id }) {
+    set({ isLoading: true, isPlaying: false })
+
     try {
       const res = await fetch(`/api/songApi?lib=${lib}&id=${id}`)
 
@@ -16,9 +19,11 @@ export const useMusicStore = create<MusicStore>((set) => ({
       }
 
       const data = await res.json()
-      set({ playingMusic: data })
+      set({ playingMusic: data, isPlaying: true })
     } catch (error) {
       console.error(error)
+    } finally {
+      set({ isLoading: false })
     }
   }
 }))
