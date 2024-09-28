@@ -1,14 +1,15 @@
 import type { Song, Albums, AllSongs } from '../types/dataMusic'
 import { TYPE_PLAYLIST } from '../consts/playlistType'
+import type { PlayingMusic } from '../types/storeTypes'
 
 export const albums: Albums[] = [
   {
     id: 1,
-    title: 'EP',
+    title: 'Kiss Land',
     cover: '/IMGS/ALBUMS/01.webp',
-    artist: 'Kendrick Lamar',
-    year: 2008,
-    songNumber: 15
+    artist: 'The Weeknd',
+    year: 2013,
+    songNumber: 10
   },
   {
     id: 2,
@@ -192,3 +193,13 @@ export const songsPopular: Song[] = Allsong.filter(
   artist: song.artist,
   audio: song.audio
 }))
+
+export const initialSong: PlayingMusic = {
+  id: 1,
+  typePlaylist: TYPE_PLAYLIST.SONGS_TOP,
+  cover: songsTop[0].cover,
+  title: songsTop[0].title,
+  artist: songsTop[0].artist,
+  audio: songsTop[0].audio,
+  playlistLenght: songsTop.length
+}
