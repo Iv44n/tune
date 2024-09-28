@@ -1,6 +1,6 @@
 import type { PlaylistTypeValue, Song } from '../types/dataMusic'
 
-interface PlayingMusic extends Song {
+export interface PlayingMusic extends Song {
   playlistLenght: number;
 }
 
