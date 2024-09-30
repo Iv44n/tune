@@ -3,42 +3,47 @@ import type { PlaylistTypeValue, Song } from '../../types/dataMusic'
 import type { APIRoute } from 'astro'
 import { TYPE_PLAYLIST } from '../../consts/playlistType'
 
-const searchSongById = ({ lib, id }: { lib: PlaylistTypeValue; id: number }) => {
-  switch (lib) {
-  case TYPE_PLAYLIST.SONGS_TOP:
-    return songsTop.find((song) => song.id === id)
-  case TYPE_PLAYLIST.SONGS_POPULAR:
-    return songsPopular.find((song) => song.id === id)
-  default:
-    return undefined
+const searchSongById = ({ lib, id }: { lib: PlaylistTypeValue; id: number }) : Song | undefined => {
+  const playlist = lib === TYPE_PLAYLIST.SONGS_TOP ? songsTop : songsPopular
+  return playlist.find((song) => song.id === id)
+}
+
+const getParamsFromUrl = (url: string): { lib: PlaylistTypeValue; id: number } | null => {
+  const urlObj = new URL(url)
+  const lib = urlObj.searchParams.get('lib') as PlaylistTypeValue
+  const id = Number(urlObj.searchParams.get('id'))
+
+  if (!lib || isNaN(id)) return null
+  if(![TYPE_PLAYLIST.SONGS_TOP, TYPE_PLAYLIST.SONGS_POPULAR].includes(lib)) {
+    throw new Error('Library not found')
   }
+
+  return { lib, id }
 }
 
 export const GET: APIRoute = ({ request }) => {
   try {
-    const { url } = request
-    const urlObj = new URL(url)
-    const library = urlObj.searchParams.get('lib') as PlaylistTypeValue
-    const id = Number(urlObj.searchParams.get('id'))
+    const params = getParamsFromUrl(request.url)
 
-    if (library !== TYPE_PLAYLIST.SONGS_TOP && library !== TYPE_PLAYLIST.SONGS_POPULAR) {
+    if (!params) {
       return new Response(
-        JSON.stringify({ error: 'Library not found' }),
+        JSON.stringify({ error: 'Invalid parameters' }),
         {
-          status: 404,
-          statusText: 'Not Found Library'
+          status: 400,
+          statusText: 'Bad Request'
         }
       )
     }
 
-    const playlistLenght = library === TYPE_PLAYLIST.SONGS_TOP ? songsTop.length : songsPopular.length
+    const { lib, id } = params
 
-    const song: Song | undefined = searchSongById({ lib: library, id })
+    const song: Song | undefined = searchSongById({ lib, id })
+    const playlistLenght = lib === TYPE_PLAYLIST.SONGS_TOP ? songsTop.length : songsPopular.length
 
     if (!song) {
       return new Response(JSON.stringify({ error: 'Song not found' }), {
         status: 404,
-        statusText: 'Not Found Song'
+        statusText: 'Not Found'
       })
     }
 
@@ -47,7 +52,8 @@ export const GET: APIRoute = ({ request }) => {
       statusText: 'OK'
     })
   } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), {
+    console.error(error)
+    return new Response(JSON.stringify({ error: 'Internal Server Error' }), {
       status: 500,
       statusText: 'Internal Server Error'
     })
