@@ -1,10 +1,12 @@
 ---
 import Layout from '../../layouts/Layout.astro'
 import { albums } from '../../lib/data'
+import type { Albums } from '../../types/dataMusic'
 
 const { id } = Astro.params
 
-const albumData = albums.find((album) => album.id === parseInt(id))
+const albumData: Albums = albums.find((album) => album.id === parseInt(id as string)) as Albums
+
 const { title, cover, artist, year, songNumber } = albumData
 ---
 
