@@ -98,7 +98,7 @@ import Message from './Message.astro'
 document.addEventListener('astro:after-swap', setupCarousel)
 
 function setupCarousel() {
-  const carousel = document.querySelector('.carousel')
+  const carousel = document.querySelector('.carousel') as HTMLUListElement
   const buttons = document.querySelectorAll('.btn')
   const card = document.querySelector('.card') as HTMLLIElement
 
